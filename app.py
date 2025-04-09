@@ -280,6 +280,8 @@ def mini_chatbot_response(query):
         return "🎨 *Coco*, *Zootopia*, and *Spider-Man: Into the Spider-Verse* are top-tier animated picks!"
     elif "action" in query:
         return "💥 Action fans might enjoy *Mad Max: Fury Road*, *John Wick*, or *Gladiator*!"
+    elif "romantic" in query:
+        return "❤️ Here are some romantic movies *The Notebook*, *You've Got Mail,*, or *Love Actually*!"
     elif query.strip() == "":
         return None
     else:
