@@ -75,50 +75,78 @@ theme_styles = {
 
 style = theme_styles[theme]
 
-# 🎨 Custom CSS + Theme-Based Emoji Animation
+# 🌠 Add floating emoji animations per theme
 animations = {
+    "🌞 Light": """
+        .emoji-float {
+            position: fixed;
+            top: -40px;
+            font-size: 24px;
+            animation: dropConfetti 6s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes dropConfetti {
+            0% {transform: translateY(0);}
+            100% {transform: translateY(100vh);}
+        }
+    """,
+    "🌙 Dark": """
+        .emoji-float {
+            position: fixed;
+            top: -50px;
+            font-size: 22px;
+            animation: floatStars 8s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes floatStars {
+            0% {transform: translateY(0);}
+            100% {transform: translateY(100vh);}
+        }
+    """,
     "🎃 Halloween": """
-    .emoji-float {
-        position: fixed;
-        top: -50px;
-        font-size: 30px;
-        animation: fall 6s linear infinite;
-        pointer-events: none;
-        z-index: 9999;
-    }
-    @keyframes fall {
-        0% {transform: translateY(0) rotate(0deg);}
-        100% {transform: translateY(100vh) rotate(360deg);}
-    }
+        .emoji-float {
+            position: fixed;
+            top: -50px;
+            font-size: 30px;
+            animation: fall 6s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes fall {
+            0% {transform: translateY(0) rotate(0deg);}
+            100% {transform: translateY(100vh) rotate(360deg);}
+        }
     """,
     "❄️ Winter": """
-    .emoji-float {
-        position: fixed;
-        top: -40px;
-        font-size: 24px;
-        animation: snow 8s linear infinite;
-        pointer-events: none;
-        z-index: 9999;
-    }
-    @keyframes snow {
-        0% {transform: translateY(0);}
-        100% {transform: translateY(100vh);}
-    }
+        .emoji-float {
+            position: fixed;
+            top: -40px;
+            font-size: 24px;
+            animation: snow 8s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes snow {
+            0% {transform: translateY(0);}
+            100% {transform: translateY(100vh);}
+        }
     """,
     "💘 Valentine": """
-    .emoji-float {
-        position: fixed;
-        top: -30px;
-        font-size: 28px;
-        animation: floatHeart 7s ease-in-out infinite;
-        pointer-events: none;
-        z-index: 9999;
-    }
-    @keyframes floatHeart {
-        0% {transform: translateY(0) scale(1);}
-        50% {transform: translateY(50vh) scale(1.2);}
-        100% {transform: translateY(100vh) scale(1);}
-    }
+        .emoji-float {
+            position: fixed;
+            top: -30px;
+            font-size: 28px;
+            animation: floatHeart 7s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes floatHeart {
+            0% {transform: translateY(0) scale(1);}
+            50% {transform: translateY(50vh) scale(1.2);}
+            100% {transform: translateY(100vh) scale(1);}
+        }
     """
 }
 
@@ -126,7 +154,7 @@ custom_css = f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family={style['font'].replace(" ", "+")}:wght@400;700&display=swap');
 
-html, body, .stApp, h1, h2, h3, h4, h5, h6, p, div, span, label, button, textarea, input, select {{
+html, body, .stApp {{
     font-family: '{style['font']}', sans-serif !important;
     font-size: {style['font_size']};
     background: {style['bg']};
@@ -192,18 +220,24 @@ html, body, .stApp, h1, h2, h3, h4, h5, h6, p, div, span, label, button, textare
 </style>
 """
 
-
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# 🎄 Floating Emoji Animations
-emoji = {"🎃 Halloween": "🦇", "❄️ Winter": "❄️", "💘 Valentine": "💖"}.get(theme)
+# 🎉 Floating Emoji Elements
+emoji_map = {
+    "🌞 Light": "🎉",
+    "🌙 Dark": "🌟",
+    "🎃 Halloween": "🦇",
+    "❄️ Winter": "❄️",
+    "💘 Valentine": "💖"
+}
+emoji = emoji_map.get(theme)
 if emoji:
     floats = "".join(
         [f"<div class='emoji-float' style='left:{i * 8 + 5}vw;'>{emoji}</div>" for i in range(10)]
     )
     st.markdown(f"<div>{floats}</div>", unsafe_allow_html=True)
 
-# 🎬 Title & Greeting
+# 🏷️ Title & Greeting
 st.markdown(f"<h1 style='text-align:center;'>{style['emoji']} Movie Recommendation System</h1>", unsafe_allow_html=True)
 st.markdown(f"<h3 style='text-align:center; font-weight:400;'>{style['greeting']}</h3>", unsafe_allow_html=True)
 
@@ -211,14 +245,14 @@ st.markdown(f"<h3 style='text-align:center; font-weight:400;'>{style['greeting']
 movie_list = movies['title'].values
 selected_movie = st.selectbox("🎭 Pick a movie you like:", movie_list)
 
-# 💡 Recommendation Function
+# 🔍 Recommendation Logic
 def recommend(movie):
     index = movies[movies['title'] == movie].index[0]
     distances = similarity[index]
     movie_indices = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
     return [movies.iloc[i[0]].title for i in movie_indices]
 
-# 💬 Chat-Style Recommendations
+# 💬 Chat-style Recommendations
 if st.button("💬 Recommend Some Movies!"):
     recommendations = recommend(selected_movie)
 
@@ -240,11 +274,10 @@ if st.button("💬 Recommend Some Movies!"):
         time.sleep(0.5)
         st.markdown(f"<div class='message-container'><div class='chat-bubble bot-bubble'>🍿 Want more recs? Just pick another movie! I’ve got plenty. 😎</div></div>", unsafe_allow_html=True)
 
-# 🤖 Mini Chatbot Section
+# 🤖 Mini Chatbot
 st.markdown("### 🤖 Ask the Movie Bot Something")
 user_query = st.text_input("💬 Type your question here...")
 
-# Predefined chatbot logic
 def mini_chatbot_response(query):
     query = query.lower()
 
@@ -267,7 +300,6 @@ def mini_chatbot_response(query):
     else:
         return "🤔 Hmm, I’m still learning. Try asking for a genre or mood like 'scary', 'animated', or 'short movies'!"
 
-# Display chatbot response in chat bubbles
 response = mini_chatbot_response(user_query)
 
 if response:
