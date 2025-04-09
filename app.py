@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import lzma
 import time
+import random
 
 # Load data
 movie_dict = pickle.load(open('movie_dict.pkl', 'rb'))
@@ -29,7 +30,8 @@ theme_styles = {
         "font": "Quicksand",
         "font_size": "18px",
         "cursor": "url('https://github.com/merlynmartis/movie_cursor_images/blob/main/light.png?raw=true'), auto",
-        "greeting": " Hey there, sunshine! Ready for some feel-good flicks?"
+        "greeting": " Hey there, sunshine! Ready for some feel-good flicks?",
+        "fallback": "sans-serif"
     },
     "🌙 Dark": {
         "bg": "linear-gradient(to right, #232526, #414345)",
@@ -39,7 +41,8 @@ theme_styles = {
         "font": "Rubik",
         "font_size": "17px",
         "cursor": "url('https://github.com/merlynmartis/movie_cursor_images/blob/main/dark.png?raw=true'), auto",
-        "greeting": "🌌 Enter the night... and discover cinematic gems."
+        "greeting": "🌌 Enter the night... and discover cinematic gems.",
+        "fallback": "sans-serif"
     },
     "🎃 Halloween": {
         "bg": "linear-gradient(to right, #4b2c20, #ff7518)",
@@ -49,7 +52,8 @@ theme_styles = {
         "font": "Creepster",
         "font_size": "20px",
         "cursor": "url('https://github.com/merlynmartis/movie_cursor_images/blob/main/halloween.png?raw=true'), auto",
-        "greeting": " Welcome, mortal! Dare to watch something spooky?"
+        "greeting": " Welcome, mortal! Dare to watch something spooky?",
+        "fallback": "cursive"
     },
     "❄️ Winter": {
         "bg": "linear-gradient(to right, #a1c4fd, #c2e9fb)",
@@ -59,7 +63,8 @@ theme_styles = {
         "font": "Montserrat",
         "font_size": "17px",
         "cursor": "url('https://github.com/merlynmartis/movie_cursor_images/blob/main/winter.png?raw=true'), auto",
-        "greeting": " Welcome to the cozy side of cinema!"
+        "greeting": " Welcome to the cozy side of cinema!",
+        "fallback": "sans-serif"
     },
     "💘 Valentine": {
         "bg": "linear-gradient(to right, #ff9a9e, #fad0c4)",
@@ -69,90 +74,30 @@ theme_styles = {
         "font": "Dancing Script",
         "font_size": "19px",
         "cursor": "url('https://github.com/merlynmartis/movie_cursor_images/blob/main/valentine.png?raw=true'), auto",
-        "greeting": " Ready to fall in love with a movie?"
+        "greeting": " Ready to fall in love with a movie?",
+        "fallback": "cursive"
     }
 }
 
 style = theme_styles[theme]
 
-# 🌠 Add floating emoji animations per theme
+# 🎈 Floating emojis per theme
 animations = {
-    "🌞 Light": """
-        .emoji-float {
-            position: fixed;
-            top: -40px;
-            font-size: 24px;
-            animation: dropConfetti 6s linear infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        @keyframes dropConfetti {
-            0% {transform: translateY(0);}
-            100% {transform: translateY(100vh);}
-        }
-    """,
-    "🌙 Dark": """
-        .emoji-float {
-            position: fixed;
-            top: -50px;
-            font-size: 22px;
-            animation: floatStars 8s linear infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        @keyframes floatStars {
-            0% {transform: translateY(0);}
-            100% {transform: translateY(100vh);}
-        }
-    """,
-    "🎃 Halloween": """
-        .emoji-float {
-            position: fixed;
-            top: -50px;
-            font-size: 30px;
-            animation: fall 6s linear infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        @keyframes fall {
-            0% {transform: translateY(0) rotate(0deg);}
-            100% {transform: translateY(100vh) rotate(360deg);}
-        }
-    """,
-    "❄️ Winter": """
-        .emoji-float {
-            position: fixed;
-            top: -40px;
-            font-size: 24px;
-            animation: snow 8s linear infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        @keyframes snow {
-            0% {transform: translateY(0);}
-            100% {transform: translateY(100vh);}
-        }
-    """,
-    "💘 Valentine": """
-        .emoji-float {
-            position: fixed;
-            top: -30px;
-            font-size: 28px;
-            animation: floatHeart 7s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        @keyframes floatHeart {
-            0% {transform: translateY(0) scale(1);}
-            50% {transform: translateY(50vh) scale(1.2);}
-            100% {transform: translateY(100vh) scale(1);}
-        }
-    """
+    "🌞 Light": "dropConfetti",
+    "🌙 Dark": "floatStars",
+    "🎃 Halloween": "fall",
+    "❄️ Winter": "snow",
+    "💘 Valentine": "floatHeart"
 }
 
+animation_name = animations.get(theme, "")
 custom_css = f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family={style['font'].replace(" ", "+")}:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family={style['font'].replace(" ", "+")}&display=swap');
+
+* {{
+    font-family: '{style['font']}', sans-serif !important;
+}}
 
 html, body, .stApp {{
     font-family: '{style['font']}', sans-serif !important;
@@ -216,13 +161,47 @@ html, body, .stApp {{
     to {{opacity: 1; transform: translateY(0);}}
 }}
 
-{animations.get(theme, '')}
+@keyframes dropConfetti {{
+    0% {{ transform: translateY(0); }}
+    100% {{ transform: translateY(100vh); }}
+}}
+
+@keyframes floatStars {{
+    0% {{ transform: translateY(0); }}
+    100% {{ transform: translateY(100vh); }}
+}}
+
+@keyframes fall {{
+    0% {{ transform: translateY(0) rotate(0deg); }}
+    100% {{ transform: translateY(100vh) rotate(360deg); }}
+}}
+
+@keyframes snow {{
+    0% {{ transform: translateY(0); }}
+    100% {{ transform: translateY(100vh); }}
+}}
+
+@keyframes floatHeart {{
+    0% {{ transform: translateY(0) scale(1); }}
+    50% {{ transform: translateY(50vh) scale(1.2); }}
+    100% {{ transform: translateY(100vh) scale(1); }}
+}}
+
+.emoji-float {{
+    position: fixed;
+    top: -40px;
+    font-size: 28px;
+    animation: {animation_name} 7s linear infinite;
+    pointer-events: none;
+    z-index: 9999;
+}}
 </style>
 """
 
+
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# 🎉 Floating Emoji Elements
+# 🎉 Add floating emojis
 emoji_map = {
     "🌞 Light": "🎉",
     "🌙 Dark": "🌟",
@@ -231,10 +210,13 @@ emoji_map = {
     "💘 Valentine": "💖"
 }
 emoji = emoji_map.get(theme)
+
 if emoji:
-    floats = "".join(
-        [f"<div class='emoji-float' style='left:{i * 8 + 5}vw;'>{emoji}</div>" for i in range(10)]
-    )
+    floats = ""
+    for i in range(15):
+        left = random.randint(0, 95)
+        delay = random.uniform(0, 5)
+        floats += f"<div class='emoji-float' style='left:{left}vw; animation-delay:{delay:.2f}s'>{emoji}</div>"
     st.markdown(f"<div>{floats}</div>", unsafe_allow_html=True)
 
 # 🏷️ Title & Greeting
@@ -280,7 +262,6 @@ user_query = st.text_input("💬 Type your question here...")
 
 def mini_chatbot_response(query):
     query = query.lower()
-
     if "scary" in query or "horror" in query:
         return "👻 If you're brave enough, check out *Hereditary*, *The Conjuring*, or *Get Out*! 🎃"
     elif "under 90" in query or "short" in query:
