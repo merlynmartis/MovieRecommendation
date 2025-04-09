@@ -264,9 +264,13 @@ def mini_chatbot_response(query):
     query = query.lower()
     if "scary" in query or "horror" in query:
         return "👻 If you're brave enough, check out *Hereditary*, *The Conjuring*, or *Get Out*! 🎃"
+    if "horror" in query or "horror" in query:
+        return "👻 If you're brave enough, check out *Hereditary*, *The Conjuring*, or *Get Out*! 🎃"
     elif "under 90" in query or "short" in query:
         return "⏱️ Sure! *Toy Story*, *Run Lola Run*, and *My Neighbor Totoro* are awesome and short!"
     elif "comedy" in query:
+        return "😂 You might love *Superbad*, *The Grand Budapest Hotel*, or *Bridesmaids*!"
+    elif "funny" in query:
         return "😂 You might love *Superbad*, *The Grand Budapest Hotel*, or *Bridesmaids*!"
     elif "sad" in query or "cry" in query:
         return "😭 Bring tissues for *The Pursuit of Happyness*, *Atonement*, or *Hachi*."
