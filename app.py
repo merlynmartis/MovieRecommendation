@@ -83,11 +83,7 @@ style = theme_styles[theme]
 
 # 🎈 Floating emojis per theme
 animations = {
-    "🌞 Light": "dropConfetti",
-    "🌙 Dark": "floatStars",
-    "🎃 Halloween": "fall",
-    "❄️ Winter": "snow",
-    "💘 Valentine": "floatHeart"
+    "🎃 Halloween": "fall"
 }
 
 animation_name = animations.get(theme, "")
