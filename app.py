@@ -260,14 +260,10 @@ def mini_chatbot_response(query):
     query = query.lower()
     if "scary" in query or "horror" in query:
         return "👻 If you're brave enough, check out *Hereditary*, *The Conjuring*, or *Get Out*! 🎃"
-    if "horror" in query or "horror" in query:
-        return "👻 If you're brave enough, check out *Hereditary*, *The Conjuring*, or *Get Out*! 🎃"
     elif "under 90" in query or "short" in query:
         return "⏱️ Sure! *Toy Story*, *Run Lola Run*, and *My Neighbor Totoro* are awesome and short!"
-    elif "comedy" in query:
-        return "😂 You might love *Superbad*, *The Grand Budapest Hotel*, or *Bridesmaids*!"
-    elif "funny" in query:
-        return "😂 You might love *Superbad*, *The Grand Budapest Hotel*, or *Bridesmaids*!"
+    elif "comedy" in query or "funny" in query:
+        return "You might love *Superbad*, *The Grand Budapest Hotel*, or *Bridesmaids*!"
     elif "sad" in query or "cry" in query:
         return "😭 Bring tissues for *The Pursuit of Happyness*, *Atonement*, or *Hachi*."
     elif "feel good" in query:
@@ -276,7 +272,7 @@ def mini_chatbot_response(query):
         return "🎨 *Coco*, *Zootopia*, and *Spider-Man: Into the Spider-Verse* are top-tier animated picks!"
     elif "action" in query:
         return "💥 Action fans might enjoy *Mad Max: Fury Road*, *John Wick*, or *Gladiator*!"
-    elif "romantic" in query:
+    elif "romantic" in query or "romance" in query:
         return "❤️ Here are some romantic movies *The Notebook*, *You've Got Mail,*, or *Love Actually*!"
     elif "thriller" in query:
         return "💥 Here are some thriller movies *Shutter Island*, *Gone Girl,*, or *Memento*!"
