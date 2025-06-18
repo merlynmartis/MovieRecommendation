@@ -278,6 +278,8 @@ def mini_chatbot_response(query):
         return "💥 Action fans might enjoy *Mad Max: Fury Road*, *John Wick*, or *Gladiator*!"
     elif "romantic" in query:
         return "❤️ Here are some romantic movies *The Notebook*, *You've Got Mail,*, or *Love Actually*!"
+    elif "thriller" in query:
+        return "💥 Here are some thriller movies *Shutter Island*, *Gone Girl,*, or *Memento*!"
     elif query.strip() == "":
         return None
     else:
